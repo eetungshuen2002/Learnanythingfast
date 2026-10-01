@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Learnitfast — Study Smarter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1f2937;
+      --border: #2d3748;
+      --accent: #6ee7b7;
+      --accent2: #3b82f6;
+      --accent-glow: rgba(110,231,183,0.15);
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --error: #f87171;
+      --warn: #fbbf24;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body {
+      font-family: 'Sora', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      line-height: 1.6;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      color: var(--accent);
+      letter-spacing: -0.5px;
+    }
+
+    .logo span {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 1rem;
+    }
+
+    .header-tag {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 64px 24px 48px;
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid rgba(110,231,183,0.3);
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      letter-spacing: 0.3px;
+    }
+
+    .hero h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.15;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+
+    .hero h1 em {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 480px;
+      margin: 0 auto;
+      font-weight: 300;
+    }
+
+    /* ── UPLOAD CARD ── */
+    .upload-section {
+      max-width: 720px;
+      margin: 0 auto 48px;
+      padding: 0 24px;
+    }
+
+    .upload-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+
+    .upload-card h2 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    /* drop zone */
+    .drop-zone {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 40px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      background: var(--bg);
+    }
+
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--accent);
+      background: var(--accent-glow);
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .drop-icon {
+      font-size: 2.5rem;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .drop-label {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .drop-label strong {
+      color: var(--accent);
+    }
+
+    .drop-sub {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    /* file preview */
+    .file-preview {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 14px 16px;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+    }
+
+    .file-preview.visible { display: flex; }
+
+    .file-icon { font-size: 1.5rem; }
+
+    .file-info { flex: 1; }
+
+    .file-name {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .file-size {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    .file-remove {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      font-size: 1.1rem;
+      padding: 4px;
+      border-radius: 4px;
+      transition: color 0.2s;
+    }
+
+    .file-remove:hover { color: var(--error); }
+
+    /* context field */
+    .context-row {
+      margin-top: 20px;
+    }
+
+    .context-row label {
+      display: block;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .context-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      resize: vertical;
+      min-height: 64px;
+      transition: border-color 0.2s;
+    }
+
+    .context-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .context-input::placeholder { color: var(--text-dim); }
+
+    /* generate button */
+    .generate-btn {
+      width: 100%;
+      margin-top: 20px;
+      padding: 14px;
+      background: var(--accent);
+      color: #0d1117;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border: none;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .generate-btn:hover:not(:disabled) { opacity: 0.9; transform: translateY(-1px); }
+    .generate-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* ── LOADING ── */
+    .loading-bar {
+      display: none;
+      margin-top: 20px;
+    }
+
+    .loading-bar.visible { display: block; }
+
+    .loading-track {
+      height: 3px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+
+    .loading-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+
+    .loading-label {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      text-align: center;
+    }
+
+    /* ── RESULTS ── */
+    .results-section {
+      display: none;
+      max-width: 720px;
+      margin: 0 auto 64px;
+      padding: 0 24px;
+    }
+
+    .results-section.visible { display: block; }
+
+    .results-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .results-title {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--text);
+    }
+
+    .results-meta {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    /* tabs */
+    .tabs {
+      display: flex;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 9px 12px;
+      background: none;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent);
+      color: #0d1117;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* ── SUMMARY PANEL ── */
+    .summary-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+    }
+
+    .summary-content h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin: 20px 0 8px;
+    }
+
+    .summary-content h3:first-child { margin-top: 0; }
+
+    .summary-content p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .summary-content ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .summary-content ul li {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      padding: 6px 0 6px 20px;
+      position: relative;
+      line-height: 1.6;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .summary-content ul li:last-child { border-bottom: none; }
+
+    .summary-content ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.8rem;
+    }
+
+    /* ── QUESTIONS PANEL ── */
+    .question-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .question-number {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent2);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 10px;
+    }
+
+    .question-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 16px;
+      line-height: 1.55;
+    }
+
+    .answer-toggle {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.8rem;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .answer-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .answer-box {
+      display: none;
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: rgba(110,231,183,0.07);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+
+    .answer-box.visible { display: block; }
+
+    .answer-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .answer-text {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ── FLASHCARDS PANEL ── */
+    .flashcard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .flashcard {
+      perspective: 1000px;
+      height: 180px;
+      cursor: pointer;
+    }
+
+    .flashcard-inner {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.45s ease;
+    }
+
+    .flashcard.flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      inset: 0;
+      backface-visibility: hidden;
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .flashcard-front {
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+
+    .flashcard-back {
+      background: var(--surface2);
+      border: 1px solid var(--accent);
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-side-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .flashcard-back .flashcard-side-label { color: var(--accent); }
+
+    .flashcard-term {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .flashcard-def {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    .flashcard-hint {
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      margin-top: auto;
+      text-align: right;
+    }
+
+    /* ── RESET ── */
+    .reset-btn {
+      display: block;
+      margin: 32px auto 0;
+      padding: 10px 24px;
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--text-muted);
+      font-family: 'Sora', sans-serif;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .reset-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      max-width: 720px;
+      margin: 0 auto 64px;
+      padding: 0 24px;
+    }
+
+    .how-section h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.4rem;
+      color: var(--text);
+      margin-bottom: 20px;
+    }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .how-step {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+    }
+
+    .how-step-num {
+      font-size: 1.6rem;
+      font-family: 'DM Serif Display', serif;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .how-step h3 {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .how-step p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ── ERROR ── */
+    .error-msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 16px;
+      background: rgba(248,113,113,0.1);
+      border: 1px solid rgba(248,113,113,0.3);
+      border-radius: var(--radius-sm);
+      font-size: 0.82rem;
+      color: var(--error);
+    }
+
+    .error-msg.visible { display: block; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      text-align: center;
+      font-size: 0.75rem;
+      color: var(--text-dim);
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 16px 20px; }
+      .hero { padding: 40px 20px 32px; }
+      .how-steps { grid-template-columns: 1fr; }
+      .flashcard-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="logo">Learnitfast <span>beta</span></div>
+  <div class="header-tag">Upload notes → Study smarter</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-eyebrow">AI-powered study tool</div>
+  <h1>Your notes.<br><em>Instantly studied.</em></h1>
+  <p>Upload any PDF or photo of your notes and get a summary, practice questions, and flashcards — generated from your actual content.</p>
+</section>
+
+<!-- UPLOAD CARD -->
+<section class="upload-section">
+  <div class="upload-card">
+    <h2>Upload your notes</h2>
+
+    <div class="drop-zone" id="dropZone">
+      <input type="file" id="fileInput" accept=".pdf,image/*" />
+      <span class="drop-icon">📄</span>
+      <div class="drop-label"><strong>Click to upload</strong> or drag and drop</div>
+      <div class="drop-sub">PDF or image (JPG, PNG, HEIC) · max 10 MB</div>
+    </div>
+
+    <div class="file-preview" id="filePreview">
+      <span class="file-icon" id="fileIcon">📄</span>
+      <div class="file-info">
+        <div class="file-name" id="fileName">—</div>
+        <div class="file-size" id="fileSize">—</div>
+      </div>
+      <button class="file-remove" id="fileRemove" title="Remove file">✕</button>
+    </div>
+
+    <div class="context-row">
+      <label for="contextInput">What subject or topic is this? <span style="color:var(--text-dim);font-weight:300">(optional but helps AI focus)</span></label>
+      <textarea class="context-input" id="contextInput" placeholder="e.g. Business Law — Contract formation, or Finance 101 Chapter 3"></textarea>
+    </div>
+
+    <button class="generate-btn" id="generateBtn" disabled>Generate Summary, Questions & Flashcards</button>
+
+    <div class="loading-bar" id="loadingBar">
+      <div class="loading-track"><div class="loading-fill" id="loadingFill"></div></div>
+      <div class="loading-label" id="loadingLabel">Reading your notes…</div>
+    </div>
+
+    <div class="error-msg" id="errorMsg"></div>
+  </div>
+</section>
+
+<!-- RESULTS -->
+<section class="results-section" id="resultsSection">
+  <div class="results-header">
+    <div class="results-title" id="resultsTitle">Results</div>
+    <div class="results-meta" id="resultsMeta"></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="summary">📋 Summary</button>
+    <button class="tab-btn" data-tab="questions">❓ Questions</button>
+    <button class="tab-btn" data-tab="flashcards">🃏 Flashcards</button>
+  </div>
+
+  <div class="tab-panel active" id="tab-summary">
+    <div class="summary-content" id="summaryContent"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-questions">
+    <div id="questionsContent"></div>
+  </div>
+
+  <div class="tab-panel" id="tab-flashcards">
+    <div class="flashcard-grid" id="flashcardsContent"></div>
+  </div>
+
+  <button class="reset-btn" id="resetBtn">↑ Upload new notes</button>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how-section" id="howSection">
+  <h2>How it works</h2>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-step-num">1</div>
+      <h3>Upload your notes</h3>
+      <p>Drop in a PDF or photo of your lecture slides, textbook pages, or handwritten notes.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">2</div>
+      <h3>AI reads your content</h3>
+      <p>The AI extracts key topics, definitions, and concepts directly from what you uploaded.</p>
+    </div>
+    <div class="how-step">
+      <div class="how-step-num">3</div>
+      <h3>Study three ways</h3>
+      <p>Get a clean summary, practice questions with answers, and flip-card flashcards — all from your own material.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Learnitfast · Powered by Claude AI · Your files are never stored
+</footer>
+
+<script>
+  // ── STATE
+  let selectedFile = null;
+
+  // ── FILE INPUT
+  const fileInput = document.getElementById('fileInput');
+  const dropZone = document.getElementById('dropZone');
+  const filePreview = document.getElementById('filePreview');
+  const fileName = document.getElementById('fileName');
+  const fileSize = document.getElementById('fileSize');
+  const fileIcon = document.getElementById('fileIcon');
+  const fileRemove = document.getElementById('fileRemove');
+  const generateBtn = document.getElementById('generateBtn');
+
+  function formatBytes(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+    return (b/1048576).toFixed(1) + ' MB';
+  }
+
+  function setFile(file) {
+    if (!file) return;
+    if (file.size > 10 * 1024 * 1024) {
+      showError('File is too large. Please upload a file under 10 MB.');
+      return;
+    }
+    selectedFile = file;
+    fileName.textContent = file.name;
+    fileSize.textContent = formatBytes(file.size);
+    fileIcon.textContent = file.type === 'application/pdf' ? '📄' : '🖼️';
+    filePreview.classList.add('visible');
+    generateBtn.disabled = false;
+    hideError();
+  }
+
+  function clearFile() {
+    selectedFile = null;
+    fileInput.value = '';
+    filePreview.classList.remove('visible');
+    generateBtn.disabled = true;
+  }
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) setFile(fileInput.files[0]);
+  });
+
+  fileRemove.addEventListener('click', clearFile);
+
+  dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    if (e.dataTransfer.files[0]) setFile(e.dataTransfer.files[0]);
+  });
+
+  // ── LOADING
+  const loadingBar = document.getElementById('loadingBar');
+  const loadingFill = document.getElementById('loadingFill');
+  const loadingLabel = document.getElementById('loadingLabel');
+
+  const loadingSteps = [
+    [10, 'Reading your notes…'],
+    [30, 'Identifying key topics…'],
+    [55, 'Generating summary…'],
+    [75, 'Writing practice questions…'],
+    [90, 'Creating flashcards…'],
+  ];
+
+  let loadingInterval;
+
+  function startLoading() {
+    loadingBar.classList.add('visible');
+    loadingFill.style.width = '0%';
+    let step = 0;
+    loadingInterval = setInterval(() => {
+      if (step < loadingSteps.length) {
+        loadingFill.style.width = loadingSteps[step][0] + '%';
+        loadingLabel.textContent = loadingSteps[step][1];
+        step++;
+      }
+    }, 1800);
+  }
+
+  function stopLoading() {
+    clearInterval(loadingInterval);
+    loadingFill.style.width = '100%';
+    loadingLabel.textContent = 'Done!';
+    setTimeout(() => loadingBar.classList.remove('visible'), 800);
+  }
+
+  // ── ERROR
+  const errorMsg = document.getElementById('errorMsg');
+  function showError(msg) { errorMsg.textContent = msg; errorMsg.classList.add('visible'); }
+  function hideError() { errorMsg.classList.remove('visible'); }
+
+  // ── FILE TO BASE64
+  function fileToBase64(file) {
+    return new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(',')[1]);
+      r.onerror = () => rej(new Error('Failed to read file'));
+      r.readAsDataURL(file);
+    });
+  }
+
+  // ── GENERATE
+  generateBtn.addEventListener('click', async () => {
+    if (!selectedFile) return;
+
+    hideError();
+    generateBtn.disabled = true;
+    startLoading();
+    document.getElementById('resultsSection').classList.remove('visible');
+
+    try {
+      const base64 = await fileToBase64(selectedFile);
+      const isPDF = selectedFile.type === 'application/pdf';
+      const context = document.getElementById('contextInput').value.trim();
+
+      const prompt = `You are a study assistant. A student has uploaded their notes${context ? ` for: ${context}` : ''}.
+
+Read the uploaded content carefully and generate the following in valid JSON format only (no markdown, no extra text):
+
+{
+  "title": "short descriptive title for this topic",
+  "summary": {
+    "overview": "2-3 sentence overview of what these notes cover",
+    "sections": [
+      {
+        "heading": "section heading",
+        "points": ["key point 1", "key point 2", "key point 3"]
+      }
+    ]
+  },
+  "questions": [
+    {
+      "question": "question text",
+      "answer": "detailed answer based on the notes"
+    }
+  ],
+  "flashcards": [
+    {
+      "term": "term or concept",
+      "definition": "clear definition or explanation"
+    }
+  ]
+}
+
+Requirements:
+- Generate 5-7 summary sections covering all major topics
+- Generate 6 practice questions ranging from recall to application
+- Generate 8-10 flashcards for key terms and concepts
+- Base everything ONLY on the content in the uploaded notes
+- Keep language clear and suitable for revision`;
+
+      const contentArray = [
+        {
+          type: isPDF ? 'document' : 'image',
+          source: {
+            type: 'base64',
+            media_type: isPDF ? 'application/pdf' : selectedFile.type,
+            data: base64
+          }
+        },
+        { type: 'text', text: prompt }
+      ];
+
+      const response = await fetch('/.netlify/functions/claude', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content: contentArray })
+      });
+
+      if (!response.ok) {
+        const err = await response.json().catch(() => ({}));
+        throw new Error(err.error || 'Server error — please try again');
+      }
+
+      const data = await response.json();
+      const raw = data.content?.[0]?.text || '';
+
+      // parse JSON — strip any accidental markdown fences
+      const clean = raw.replace(/```json|```/g, '').trim();
+      let parsed;
+      try {
+        parsed = JSON.parse(clean);
+      } catch {
+        throw new Error('AI response was not valid JSON. Please try again.');
+      }
+
+      stopLoading();
+      renderResults(parsed, selectedFile.name);
+
+    } catch (err) {
+      stopLoading();
+      showError('Error: ' + err.message);
+      generateBtn.disabled = false;
+    }
+  });
+
+  // ── RENDER
+  function renderResults(data, filename) {
+    // title
+    document.getElementById('resultsTitle').textContent = data.title || 'Study Results';
+    document.getElementById('resultsMeta').textContent = `From: ${filename}`;
+
+    // SUMMARY
+    const sc = document.getElementById('summaryContent');
+    sc.innerHTML = '';
+    if (data.summary?.overview) {
+      const p = document.createElement('p');
+      p.textContent = data.summary.overview;
+      sc.appendChild(p);
+    }
+    (data.summary?.sections || []).forEach(sec => {
+      const h = document.createElement('h3');
+      h.textContent = sec.heading;
+      sc.appendChild(h);
+      const ul = document.createElement('ul');
+      (sec.points || []).forEach(pt => {
+        const li = document.createElement('li');
+        li.textContent = pt;
+        ul.appendChild(li);
+      });
+      sc.appendChild(ul);
+    });
+
+    // QUESTIONS
+    const qc = document.getElementById('questionsContent');
+    qc.innerHTML = '';
+    (data.questions || []).forEach((q, i) => {
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.innerHTML = `
+        <div class="question-number">Question ${i + 1}</div>
+        <div class="question-text">${q.question}</div>
+        <button class="answer-toggle">Show answer</button>
+        <div class="answer-box">
+          <div class="answer-label">Answer</div>
+          <div class="answer-text">${q.answer}</div>
+        </div>
+      `;
+      const btn = card.querySelector('.answer-toggle');
+      const box = card.querySelector('.answer-box');
+      btn.addEventListener('click', () => {
+        const open = box.classList.toggle('visible');
+        btn.textContent = open ? 'Hide answer' : 'Show answer';
+      });
+      qc.appendChild(card);
+    });
+
+    // FLASHCARDS
+    const fc = document.getElementById('flashcardsContent');
+    fc.innerHTML = '';
+    (data.flashcards || []).forEach(f => {
+      const card = document.createElement('div');
+      card.className = 'flashcard';
+      card.innerHTML = `
+        <div class="flashcard-inner">
+          <div class="flashcard-front">
+            <div class="flashcard-side-label">Term</div>
+            <div class="flashcard-term">${f.term}</div>
+            <div class="flashcard-hint">Tap to flip →</div>
+          </div>
+          <div class="flashcard-back">
+            <div class="flashcard-side-label">Definition</div>
+            <div class="flashcard-def">${f.definition}</div>
+          </div>
+        </div>
+      `;
+      card.addEventListener('click', () => card.classList.toggle('flipped'));
+      fc.appendChild(card);
+    });
+
+    // show results, hide how-it-works
+    document.getElementById('resultsSection').classList.add('visible');
+    document.getElementById('howSection').style.display = 'none';
+
+    // scroll to results
+    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  // ── TABS
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── RESET
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    clearFile();
+    document.getElementById('contextInput').value = '';
+    document.getElementById('resultsSection').classList.remove('visible');
+    document.getElementById('howSection').style.display = '';
+    generateBtn.disabled = true;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>
+</body>
+</html>
